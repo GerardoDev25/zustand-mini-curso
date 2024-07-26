@@ -10,10 +10,9 @@ import { useBearStore } from '../../store/bears';
 import { usePersonStore } from '../../store/person';
 
 export const Dashboard = () => {
+  const totalBears = useBearStore((s) => s.totalBears);
+  const firstName = usePersonStore((s) => s.firstName);
 
-  const totalBears = useBearStore((s) => s.computed.totalBears)
-  const firstName = usePersonStore((s) => s.firstName)
-  
   return (
     <>
       <h1>Dashboard</h1>
@@ -24,7 +23,7 @@ export const Dashboard = () => {
         <WhiteCard centered>
           <IoPawOutline size={50} className='text-indigo-600' />
           <h2>Osos</h2>
-          <p>{totalBears}</p>
+          <p>{totalBears()}</p>
         </WhiteCard>
 
         <WhiteCard centered>
