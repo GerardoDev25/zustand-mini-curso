@@ -1,7 +1,8 @@
-import { create } from 'zustand';
+import { create, type StateCreator } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { customSessionStorage } from '../../storage';
 
-interface PersonStore {
+interface PersonState {
   firstName: string;
   lastName: string;
 }
@@ -11,16 +12,16 @@ interface Actions {
   setLastName: (value: string) => void;
 }
 
-export const usePersonStore = create<PersonStore & Actions>()(
-  persist(
-    (set) => ({
-      firstName: '',
-      lastName: '',
-      setFistName: (value: string) => set((state) => ({ firstName: value })),
-      setLastName: (value: string) => set((state) => ({ lastName: value })),
-    }),
-    {
-      name: 'person-storage',
-    }
-  )
+const storeApi: StateCreator<PersonState & Actions> = (set) => ({
+  firstName: '',
+  lastName: '',
+  setFistName: (value: string) => set(() => ({ firstName: value })),
+  setLastName: (value: string) => set(() => ({ lastName: value })),
+});
+
+export const usePersonStore = create<PersonState & Actions>()(
+  persist(storeApi, {
+    name: 'person-storage',
+    storage: customSessionStorage,
+  })
 );
