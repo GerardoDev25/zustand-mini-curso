@@ -1,6 +1,7 @@
 import { create, type StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { firebaseStorage } from '../storage';
+// import { logger } from '../middlewares';
 
 interface PersonState {
   firstName: string;
