@@ -1,7 +1,10 @@
 import { create, StateCreator } from 'zustand';
 import { v4 as uuidv4 } from 'uuid';
+import { devtools, persist } from 'zustand/middleware';
+// import { produce } from 'immer';
+
 import { Task, type TaskStatus } from '../../../interfaces/';
-import { devtools } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
 
 interface TaskState {
   // tasks: { [key: string]: Task };
@@ -14,9 +17,13 @@ interface TaskState {
   removeDraggingTaskId: () => void;
   changeTaskStatus: (taskId: string, status: TaskStatus) => void;
   onTaskDrop: (status: TaskStatus) => void;
+  totalTasksCount: () => number;
 }
 
-const storeApi: StateCreator<TaskState> = (set, get) => ({
+const storeApi: StateCreator<
+  TaskState,
+  [['zustand/devtools', never], ['zustand/immer', never]]
+> = (set, get) => ({
   draggingTaskId: undefined,
   tasks: {
     'Ach 1': { id: 'Ach 1', title: 'task 1', status: 'done' },
@@ -33,12 +40,20 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
   },
 
   addTask: (title: string, status: TaskStatus) => {
-    const newTask: Task = {
-      id: `${uuidv4()}`,
-      title,
-      status,
-    };
-    set((state) => ({ tasks: { ...state.tasks, [newTask.id]: newTask } }));
+    const newTask: Task = { id: uuidv4(), title, status };
+
+    set((state) => {
+      state.tasks[newTask.id] = newTask;
+    });
+
+    // ? this the native zustand wey
+    // set((state) => ({ tasks: { ...state.tasks, [newTask.id]: newTask } }));
+    // ? this method require a trey  party library
+    // set(
+    //   produce((state: TaskState) => {
+    //     state.tasks[newTask.id] = newTask;
+    //   })
+    // );
   },
 
   setDraggingTaskId: (taskId: string) => {
@@ -50,9 +65,12 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
   },
 
   changeTaskStatus: (taskId: string, status: TaskStatus) => {
-    const task = get().tasks[taskId];
-    task.status = status;
-    set((state) => ({ tasks: { ...state.tasks, [taskId]: task } }));
+    // const task = get().tasks[taskId];
+    // task.status = status;
+    // set((state) => ({ tasks: { ...state.tasks, [taskId]: task } }));
+    set((state) => {
+      state.tasks[taskId].status = status;
+    });
   },
 
   onTaskDrop: (status: TaskStatus) => {
@@ -61,8 +79,15 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
     get().changeTaskStatus(taskId, status);
     get().removeDraggingTaskId();
   },
+
+  totalTasksCount: () => {
+    return Object.keys(get().tasks).length;
+  },
+  
 });
 
 export const useTaskStore = create<TaskState>()(
-  devtools(storeApi, { name: 'tasks' })
+  devtools(persist(immer(storeApi), { name: 'tasks-storage' }), {
+    name: 'tasks',
+  })
 );

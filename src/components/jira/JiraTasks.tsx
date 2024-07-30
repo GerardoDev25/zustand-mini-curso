@@ -1,11 +1,9 @@
 import classnames from 'classnames';
 import { IoAddOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
-import Swal from 'sweetalert2';
 
 import { Task, TaskStatus } from '../../../interfaces';
 import { SingleTask } from './SingleTask';
-import { useTaskStore } from '../../store/tasks';
-import { useState } from 'react';
+import { useTask } from '../../hooks';
 
 interface Props {
   title: string;
@@ -14,47 +12,15 @@ interface Props {
 }
 
 export const JiraTasks = ({ status, title, tasks }: Props) => {
-  const isDragging = useTaskStore((store) => !!store.draggingTaskId);
-  const onTaskDrop = useTaskStore((store) => store.onTaskDrop);
-  const addTask = useTaskStore((store) => store.addTask);
-  const [onDragOver, setOnDragOver] = useState(false);
+  const {
+    isDragging,
 
-  const handleAddTask = async () => {
-    const { isConfirmed, value } = await Swal.fire({
-      title: 'Add new task',
-      input: 'text',
-      inputLabel: 'Task Name',
-      inputPlaceholder: 'Add new task',
-      showConfirmButton: true,
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      buttonsStyling: false,
-
-      inputValidator: (value) => {
-        if (!value) {
-          return 'You need to write something!';
-        }
-      },
-    });
-
-    if (!isConfirmed) return;
-    addTask(value, status);
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setOnDragOver(true);
-  };
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setOnDragOver(false);
-  };
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setOnDragOver(false);
-    onTaskDrop(status);
-  };
+    handleAddTask,
+    handleDragLeave,
+    handleDragOver,
+    handleDrop,
+    onDragOver,
+  } = useTask({ status });
 
   return (
     <div

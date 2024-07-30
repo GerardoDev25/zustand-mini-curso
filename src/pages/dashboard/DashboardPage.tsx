@@ -8,10 +8,12 @@ import {
 import { WhiteCard } from '../../components';
 import { useBearStore } from '../../store/bears';
 import { usePersonStore } from '../../store/person';
+import { useTaskStore } from '../../store/tasks';
 
 export const Dashboard = () => {
   const totalBears = useBearStore((s) => s.totalBears);
   const firstName = usePersonStore((s) => s.firstName);
+  const totalTasks = useTaskStore((s) => s.totalTasksCount);
 
   return (
     <>
@@ -35,7 +37,7 @@ export const Dashboard = () => {
         <WhiteCard centered>
           <IoListOutline size={50} className='text-indigo-600' />
           <h2>Tareas</h2>
-          <p>Información</p>
+          <p>{totalTasks()}</p>
         </WhiteCard>
 
         <WhiteCard centered>
