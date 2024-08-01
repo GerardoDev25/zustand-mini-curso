@@ -2,13 +2,13 @@ import { WhiteCard } from '../../components';
 import { useWeddingBoundStore } from '../../store/wedding';
 
 export const WeddingInvitationPage = () => {
+  const firstName = useWeddingBoundStore((s) => s.firstName);
+  const lastName = useWeddingBoundStore((s) => s.lastName);
+  const setFistName = useWeddingBoundStore((s) => s.setFistName);
+  const setLastName = useWeddingBoundStore((s) => s.setLastName);
+  const guestCount = useWeddingBoundStore((s) => s.guestCount);
+  const setGuestNumber = useWeddingBoundStore((s) => s.setGuestCount);
 
-  const firstName = useWeddingBoundStore((s) => s.firstName)
-  const lastName = useWeddingBoundStore((s) => s.lastName)
-  const setFistName = useWeddingBoundStore((s) => s.setFistName)
-  const setLastName = useWeddingBoundStore((s) => s.setLastName)
-  
-  
   return (
     <>
       <h1>Invitación de Boda</h1>
@@ -60,6 +60,8 @@ export const WeddingInvitationPage = () => {
                 id='guestNumber'
                 placeholder='5'
                 min='0'
+                value={guestCount}
+                onChange={(e) => setGuestNumber(parseInt(e.target.value))}
                 className='w-full appearance-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
               />
             </div>

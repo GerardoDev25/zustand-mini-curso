@@ -1,11 +1,14 @@
 import { create } from 'zustand';
-import { createPeronSlice, PersonSlice } from './person.slice';
 import { devtools } from 'zustand/middleware';
 
-type ShareState = PersonSlice;
+import { createPeronSlice, PersonSlice } from './person.slice';
+import { createGuestSlice, GuestSlice } from './guests.slice';
+
+type ShareState = PersonSlice & GuestSlice;
 
 export const useWeddingBoundStore = create<ShareState>()(
   devtools((...a) => ({
     ...createPeronSlice(...a),
+    ...createGuestSlice(...a),
   }))
 );
