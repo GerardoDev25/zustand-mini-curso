@@ -8,6 +8,11 @@ export const WeddingInvitationPage = () => {
   const setLastName = useWeddingBoundStore((s) => s.setLastName);
   const guestCount = useWeddingBoundStore((s) => s.guestCount);
   const setGuestNumber = useWeddingBoundStore((s) => s.setGuestCount);
+  // const eventDate = useWeddingBoundStore((s) => s.eventDate);
+  const eventHHMM = useWeddingBoundStore((s) => s.eventHHMM());
+  const eventYYYYMMDD = useWeddingBoundStore((s) => s.eventYYYYMMDD());
+  const setEventDate = useWeddingBoundStore((s) => s.setEventDate);
+  const setEventTime = useWeddingBoundStore((s) => s.setEventTime);
 
   return (
     <>
@@ -72,7 +77,13 @@ export const WeddingInvitationPage = () => {
                   <label className='mb-3 block text-base font-medium text-[#07074D]'>
                     Fecha de evento
                   </label>
-                  <input type='date' name='eventDate' id='eventDate' />
+                  <input
+                    type='date'
+                    name='eventDate'
+                    id='eventDate'
+                    value={eventYYYYMMDD}
+                    onChange={(e) => setEventDate(e.target.value)}
+                  />
                 </div>
               </div>
               <div className='w-full px-3 sm:w-1/2'>
@@ -80,7 +91,13 @@ export const WeddingInvitationPage = () => {
                   <label className='mb-3 block text-base font-medium text-[#07074D]'>
                     Hora del evento
                   </label>
-                  <input type='time' name='eventTime' id='eventTime' />
+                  <input
+                    type='time'
+                    name='eventTime'
+                    id='eventTime'
+                    value={eventHHMM}
+                    onChange={(e) => setEventTime(e.target.value)}
+                  />
                 </div>
               </div>
             </div>
