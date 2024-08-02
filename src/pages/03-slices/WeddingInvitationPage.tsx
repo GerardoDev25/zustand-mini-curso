@@ -1,3 +1,4 @@
+import { FormEvent } from 'react';
 import { WhiteCard } from '../../components';
 import { useWeddingBoundStore } from '../../store/wedding';
 
@@ -6,13 +7,23 @@ export const WeddingInvitationPage = () => {
   const lastName = useWeddingBoundStore((s) => s.lastName);
   const setFistName = useWeddingBoundStore((s) => s.setFistName);
   const setLastName = useWeddingBoundStore((s) => s.setLastName);
+
   const guestCount = useWeddingBoundStore((s) => s.guestCount);
   const setGuestNumber = useWeddingBoundStore((s) => s.setGuestCount);
-  // const eventDate = useWeddingBoundStore((s) => s.eventDate);
+
+  const eventDate = useWeddingBoundStore((s) => s.eventDate);
   const eventHHMM = useWeddingBoundStore((s) => s.eventHHMM());
   const eventYYYYMMDD = useWeddingBoundStore((s) => s.eventYYYYMMDD());
   const setEventDate = useWeddingBoundStore((s) => s.setEventDate);
   const setEventTime = useWeddingBoundStore((s) => s.setEventTime);
+
+  const isConfirmed = useWeddingBoundStore((s) => s.isConfirmed);
+  const setIsConfirmed = useWeddingBoundStore((s) => s.setIsConfirmed);
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log({ firstName, lastName, guestCount, eventDate, isConfirmed });
+  };
 
   return (
     <>
@@ -22,7 +33,7 @@ export const WeddingInvitationPage = () => {
 
       <WhiteCard className='flex items-center justify-center p-12'>
         <div className='mx-auto w-full max-w-[550px]'>
-          <form>
+          <form onSubmit={onSubmit}>
             <div className='-mx-3 flex flex-wrap'>
               <div className='w-full px-3 sm:w-1/2'>
                 <div className='mb-5'>
@@ -113,6 +124,8 @@ export const WeddingInvitationPage = () => {
                     name='isComing'
                     id='radioButton1'
                     className='h-5 w-5'
+                    checked={isConfirmed}
+                    onChange={() => setIsConfirmed(true)}
                   />
                   <label className='pl-3 text-base font-medium text-[#07074D]'>
                     Si
@@ -124,6 +137,8 @@ export const WeddingInvitationPage = () => {
                     name='isComing'
                     id='radioButton2'
                     className='h-5 w-5'
+                    checked={!isConfirmed}
+                    onChange={() => setIsConfirmed(false)}
                   />
                   <label className='pl-3 text-base font-medium text-[#07074D]'>
                     No
