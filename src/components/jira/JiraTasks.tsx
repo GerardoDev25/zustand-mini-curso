@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import { IoAddOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 
-import { Task, TaskStatus } from '../../../interfaces';
+import { Task, TaskStatus } from '../../interfaces';
 import { SingleTask } from './SingleTask';
 import { useTask } from '../../hooks';
 

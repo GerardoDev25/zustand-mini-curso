@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { devtools, persist } from 'zustand/middleware';
 // import { produce } from 'immer';
 
-import { Task, type TaskStatus } from '../../../interfaces/';
+import { Task, type TaskStatus } from '../../interfaces';
 import { immer } from 'zustand/middleware/immer';
 
 interface TaskState {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { useTaskStore } from '../store/tasks';
-import { TaskStatus } from '../../interfaces';
+import { TaskStatus } from '../interfaces';
 
 interface Options {
   status: TaskStatus;
