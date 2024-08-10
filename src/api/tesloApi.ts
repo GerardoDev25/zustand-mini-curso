@@ -1,13 +1,19 @@
-import axios from 'axios'
+import axios from 'axios';
+import { useAuthStore } from '../store/auth';
 
 const tesloApi = axios.create({
-    baseURL: 'http://localhost:3000/api'
-})
-
+  baseURL: 'http://localhost:3000/api',
+});
 
 // todo interjectors
+tesloApi.interceptors.request.use((config) => {
+  const token = useAuthStore.getState().token;
 
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
 
-export {
-    tesloApi
-}
+  return config;
+});
+
+export { tesloApi };

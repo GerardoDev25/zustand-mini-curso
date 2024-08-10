@@ -9,22 +9,27 @@ export interface AuthState {
   user?: User;
 
   loginUser: (email: string, password: string) => Promise<void>;
+  checkAuthStatus: () => Promise<void>;
 }
 
-// export interface AuthStore {
-//   state: AuthState;
-//   login: (email: string, password: string) => Promise<void>;
-//   logout: () => void;
-// }
-
 const storeApi: StateCreator<AuthState> = (set) => ({
-  status: 'unauthorize',
+  status: 'pending',
   token: undefined,
   user: undefined,
 
   loginUser: async (email, password) => {
     try {
       const { token, ...user } = await AuthService.login(email, password);
+      set({ status: 'authorize', token, user });
+    } catch (error) {
+      set({ status: 'unauthorize', token: undefined, user: undefined });
+      throw new Error('Unauthorize');
+    }
+  },
+
+  checkAuthStatus: async () => {
+    try {
+      const { token, ...user } = await AuthService.checkStatus();
       set({ status: 'authorize', token, user });
     } catch (error) {
       set({ status: 'unauthorize', token: undefined, user: undefined });
