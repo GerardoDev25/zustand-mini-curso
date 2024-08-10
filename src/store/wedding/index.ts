@@ -12,10 +12,13 @@ import {
 type ShareState = PersonSlice & GuestSlice & DateSlice & ConfirmationSlice;
 
 export const useWeddingBoundStore = create<ShareState>()(
-  devtools((...a) => ({
-    ...createPeronSlice(...a),
-    ...createGuestSlice(...a),
-    ...createDateSlice(...a),
-    ...createConfirmationSlice(...a),
-  }))
+  devtools(
+    (...a) => ({
+      ...createPeronSlice(...a),
+      ...createGuestSlice(...a),
+      ...createDateSlice(...a),
+      ...createConfirmationSlice(...a),
+    }),
+    { name: 'wedding state' }
+  )
 );
