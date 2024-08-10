@@ -43,4 +43,8 @@ export class AuthService {
       throw new Error('Unauthorize');
     }
   };
+
+  static logout = () => {
+    localStorage.removeItem('auth-storage');
+  };
 }
