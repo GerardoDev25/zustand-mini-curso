@@ -1,10 +1,14 @@
 import type { AuthStatus, User } from '../../interfaces';
-import { StateCreator } from 'zustand';
+import { create, StateCreator } from 'zustand';
+import { AuthService } from '../../services/auth.service';
+import { devtools, persist } from 'zustand/middleware';
 
 export interface AuthState {
   status: AuthStatus;
   token?: string;
   user?: User;
+
+  loginUser: (email: string, password: string) => Promise<void>;
 }
 
 // export interface AuthStore {
@@ -13,9 +17,21 @@ export interface AuthState {
 //   logout: () => void;
 // }
 
-export const storeApi: StateCreator<AuthState> = (set) => ({
+const storeApi: StateCreator<AuthState> = (set) => ({
   status: 'unauthorize',
-  token:undefined,
-  user:undefined,
+  token: undefined,
+  user: undefined,
 
+  loginUser: async (email, password) => {
+    try {
+      const { token, ...user } = await AuthService.login(email, password);
+      set({ status: 'authorize', token, user });
+    } catch (error) {
+      set({ status: 'unauthorize', token: undefined, user: undefined });
+    }
+  },
 });
+
+export const useAuthStore = create<AuthState>()(
+  devtools(persist(storeApi, { name: 'auth-storage' }))
+);

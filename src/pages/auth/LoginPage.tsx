@@ -1,6 +1,9 @@
 import { FormEvent } from 'react';
+import { useAuthStore } from '../../store/auth';
 
 export const LoginPage = () => {
+  const loginUser = useAuthStore((s) => s.loginUser);
+
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // const { username, password, remember } = event.target as HTMLFormElement;
@@ -12,9 +15,12 @@ export const LoginPage = () => {
       };
     console.log(username.value, password.value, remember.checked);
 
-    username.value = '';
-    password.value = '';
-    remember.checked = false;
+    loginUser(username.value, password.value);
+    // console.log(username.value, password.value, remember.checked);
+
+    // username.value = '';
+    // password.value = '';
+    // remember.checked = false;
   };
 
   return (
@@ -23,7 +29,7 @@ export const LoginPage = () => {
 
       <form onSubmit={onSubmit}>
         <div className='mb-4'>
-          <label className='block text-gray-600'>Username</label>
+          <label className='block text-gray-600'>Email</label>
           <input type='text' name='username' autoComplete='off' />
         </div>
 
